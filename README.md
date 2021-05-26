@@ -25,7 +25,7 @@ In the top-level folder `transformations` you may add each transformation job as
 ```
 However, you can pretty much change this layout however you see fit - as long as you obey the following rule: Keep one transformation (manifest+sql) per folder.
 
-Example layout:
+#### Example layout:
 ```
 .
 └── transformations
