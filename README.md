@@ -23,6 +23,28 @@ In the top-level folder `transformations` you may add each transformation job as
         ├── manifest.yml
         └── transformation.sql
 ```
+However, you can pretty much change this layout however you see fit - as long as you obey the following rule: Keep one transformation (manifest+sql) per folder.
+
+Example layout:
+```
+.
+└── transformations
+    ├── assets
+    │   └── my_transformation_001
+    │       ├── manifest.yml
+    ├── time_series
+    │   └── my_transformation_002
+    │       ├── manifest.yml
+    ├── events
+    │   └── my_transformation_003
+    │       ├── manifest.yml
+    │       └── transformation.sql
+    ⋮
+    └── raw
+        └── my_transformation_004
+            ├── manifest.yml
+            └── transformation.sql
+```
 
 ### Requirements
 ##### Jetfire API-key
