@@ -4,7 +4,7 @@
 Transformations in CDF are used to process data from RAW to other CDF resource types ("clean"), for example Assets or Time Series.
 
 ### How
-This template uses Github Workflows to run the `jetfire-cli` to deploy transformations to CDF on merges to `master`. If you want to use it with multiple CDF projects, e.g. `customer-dev` and `customer-prod`, you can clone the `build-and-test.yml` file and modify it for merges to a specific branch of your choice.
+This template uses Github Workflows to run the `jetfire-cli` to deploy transformations to CDF on merges to `master`. If you want to use it with multiple CDF projects, e.g. `customer-dev` and `customer-prod`, you can clone the `deploy-push-master.yml` file and modify it for merges to a specific branch of your choice.
 
 ### Repository Layout
 In the top-level folder `transformations` you may add each transformation job as a new directory, for example:
@@ -12,7 +12,7 @@ In the top-level folder `transformations` you may add each transformation job as
 .
 ├── .github
 │   └── workflows
-│       ├── build-and-test.yml
+│       ├── deploy-push-master.yml
 │       └── check-pr.yml
 ├── README.md
 └── transformations
