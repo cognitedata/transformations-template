@@ -32,9 +32,11 @@ Example layout:
     ├── assets
     │   └── my_transformation_001
     │       ├── manifest.yml
+    │       └── transformation.sql
     ├── time_series
     │   └── my_transformation_002
     │       ├── manifest.yml
+    │       └── transformation.sql
     ├── events
     │   └── my_transformation_003
     │       ├── manifest.yml
