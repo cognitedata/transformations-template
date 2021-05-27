@@ -53,6 +53,7 @@ However, you can pretty much change this layout however you see fit - as long as
 In order to connect to CDF, we need the API-key for Jetfire. In this template, it will be automatically read by the workflow, by reading it from your GitHub secrets. Thus, _surprise surprise_, you need to store the API-key in GitHub secrets in your own repo. However, there is one catch! To distinguish between the API-key meant for e.g. testing- and production environments, we control this by appending the branch name responsible for deployment to the end of the secret name like this: `JETFIRE_API_KEY_{BRANCH}`.
 
 Let's check out an example. On merges to 'master', you want to deploy to `customer-dev`, so you use the API-key for this project and store it as a GitHub secret with the name:
+
 `JETFIRE_API_KEY_{BRANCH} -> JETFIRE_API_KEY_MASTER`
 
 Similarly, if you have a `customer-prod` project, and you have created a build-file that only runs on your branch `prod`, you would need to store the API-key to this project under the GitHub secret: `JETFIRE_API_KEY_PROD`. You can of course repeat this for as many projects as you want!
