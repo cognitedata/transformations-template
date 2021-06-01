@@ -1,5 +1,9 @@
 ---
-name: Deploy transformations
+##########################################
+# AUTHENTICATION OPTION 1:               #
+#                          Using API-KEY #
+##########################################
+name: Deploy transformations using API-key auth-flow
 
 on:
     push:
@@ -27,11 +31,13 @@ jobs:
 
             - name: Deploy transformations
               uses: cognitedata/jetfire-cli@v2
+              if: false  # Remove this line or this wont run! ;)
+              env:
+                  # List all needed keys referenced by your manifests
+                  # to be used by transformations at runtime:
+                  COGNITE_API_KEY: ${{ secrets.COGNITE_API_KEY }}
               with:
                   path: transformations
                   api-key: ${{ secrets[steps.extract_secrets.outputs.jetfire_api_key] }}
                   # If you are not using the main cluster (europe-west1-1), specify it here:
                   # cluster: greenfield
-              env:
-                  # List all needed keys referenced by your manifests:
-                  MY_TRANSFORMATION_API_KEY: ${{ secrets.MY_TRANSFORMATION_API_KEY }}

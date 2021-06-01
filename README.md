@@ -6,7 +6,7 @@ Transformations in CDF are used to process data from RAW to other CDF resource t
 ### How
 This template uses Github Workflows to run the `jetfire-cli` to deploy transformations to CDF on merges to `master`. If you want to use it with multiple CDF projects, e.g. `customer-dev` and `customer-prod`, you can clone the `deploy-push-master.yml` file and modify it for merges to a specific branch of your choice.
 
-### Repository Layout
+## Repository Layout
 In the top-level folder `transformations` you may add each transformation job as a new directory, for example:
 ```
 .
@@ -25,7 +25,7 @@ In the top-level folder `transformations` you may add each transformation job as
 ```
 However, you can pretty much change this layout however you see fit - as long as you obey the following rule: Keep one transformation (manifest+sql) per folder.
 
-#### Example layout:
+### Example layout:
 ```
 .
 └── transformations
@@ -48,8 +48,21 @@ However, you can pretty much change this layout however you see fit - as long as
             └── transformation.sql
 ```
 
-### Requirements
-#### Jetfire API-key
+## Requirements
+### Authentication
+There are two differnt authentication flows:
+1. Using API-keys (old)
+2. Using OIDC (new)
+
+Thus, this repository contains two similar (but different) workflow-files, one for each flow:
+1. API-key flow: `.github/workflows/deploy-push-api-key-master.yml`
+2. OIDC flow: `.github/workflows/deploy-push-oidc-master.yml`
+
+You should choose one of these, although a combination is possible, either through having different auth flow for different branches (please don't) or using an API-key for transformations (at runtime), but using OIDC flow for transformations deployment (or the other way around - also, please don't).
+
+##### We encourage the use of OIDC flow.
+
+#### 1. API-key flow
 In order to connect to CDF, we need the API-key for Jetfire. In this template, it will be automatically read by the workflow, by reading it from your GitHub secrets. Thus, _surprise surprise_, you need to store the API-key in GitHub secrets in your own repo. However, there is one catch! To distinguish between the API-key meant for e.g. testing- and production environments, we control this by appending the branch name responsible for deployment to the end of the secret name like this: `JETFIRE_API_KEY_{BRANCH}`.
 
 Let's check out an example. On merges to 'master', you want to deploy to `customer-dev`, so you use the API-key for this project and store it as a GitHub secret with the name:
@@ -58,9 +71,13 @@ Let's check out an example. On merges to 'master', you want to deploy to `custom
 
 Similarly, if you have a `customer-prod` project, and you have created a build-file that only runs on your branch `prod`, you would need to store the API-key to this project under the GitHub secret: `JETFIRE_API_KEY_PROD`. You can of course repeat this for as many projects as you want!
 
-#### Capabilities
+##### Capabilities
 The API-key needs the following:
 - `groups:list`: To verify that it is a member of the `transformations` or `jetfire` group.
+
+#### 2. OIDC flow
+
+
 
 ### Manifest
 The manifest file is a `yaml`-file that describes the transformation, like name, schedule, external ID and what CDF resource type it modifies, - and in what way (like _create_ vs _upsert_)!
@@ -110,9 +127,9 @@ authentication:
 ```
 
 #### Valid values for `action`:
-1. `upsert`: Create new items, or update existing items if their id or externalId already exists.
-2. `create`: Create new items. The transformation will fail if there are id or externalId conflicts.
-3. `update`: Update existing items. The transformation will fail if an id or externalId does not exist.
+1. `upsert`: Create new items, or update existing items if their id or `externalId` already exists.
+2. `create`: Create new items. The transformation will fail if there are id or `externalId` conflicts.
+3. `update`: Update existing items. The transformation will fail if an id or `externalId` does not exist.
 4. `delete`: Delete items by internal id.
 
 #### Schedule
