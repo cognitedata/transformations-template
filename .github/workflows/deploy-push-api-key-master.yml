@@ -1,4 +1,5 @@
 ---
+
 ##########################################
 # AUTHENTICATION OPTION 1:               #
 #                          Using API-KEY #
@@ -26,16 +27,19 @@ jobs:
               shell: bash
               env:
                   BRANCH: ${{ steps.extract_name.outputs.name }}
-              run: echo "##[set-output name=jetfire_api_key;]$(echo JETFIRE_API_KEY_${BRANCH})"
+              run: |
+                  echo "##[set-output name=jetfire_api_key;]$(echo JETFIRE_API_KEY_${BRANCH})"
+                  echo "##[set-output name=cognite_api_key;]$(echo COGNITE_API_KEY_${BRANCH})"
               id: extract_secrets
 
             - name: Deploy transformations
               uses: cognitedata/jetfire-cli@v2
               if: false  # Remove this line or this wont run! ;)
               env:
-                  # List all needed keys referenced by your manifests
-                  # to be used by transformations at runtime:
-                  COGNITE_API_KEY: ${{ secrets.COGNITE_API_KEY }}
+                  # List all needed keys or environment variables referenced by
+                  # your manifests to be used by transformations at runtime:
+                  COGNITE_API_KEY: ${{ secrets[steps.extract_secrets.outputs.cognite_api_key] }}
+                  COGNITE_PROJECT: my-cognite-project
               with:
                   path: transformations
                   api-key: ${{ secrets[steps.extract_secrets.outputs.jetfire_api_key] }}

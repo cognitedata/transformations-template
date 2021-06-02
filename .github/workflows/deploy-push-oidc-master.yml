@@ -40,6 +40,7 @@ jobs:
                   COGNITE_CLIENT_ID: my-cognite-client-id
                   COGNITE_CLIENT_SECRET: ${{ secrets[steps.extract_secrets.outputs.cognite_client_secret] }}
                   COGNITE_PROJECT: my-cognite-project
+                  TOKEN_URL: my-token-url
               with:
                   path: transformations
                   client-id: my-jetfire-client-id
