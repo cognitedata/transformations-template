@@ -40,10 +40,10 @@ apiKey: COGNITE_API_KEY
 # Either this or apiKey is required
 # The client credentials to be used in the transformation
 authentication:
-    tokenUrl: TOKEN_URL
     scopes:
         - https://bluefield.cognitedata.com/.default
     cdfProjectName: my-project
-    # The following two is given as the name of an environment variable
+    # The following are given as the name of an environment variable:
+    tokenUrl: TOKEN_URL
     clientId: COGNITE_CLIENT_ID
     clientSecret: COGNITE_CLIENT_SECRET
