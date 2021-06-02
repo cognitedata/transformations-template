@@ -4,7 +4,7 @@ name: My Transformation 001 # Required
 shared: true  # Optional, default: false
 
 # If null, the transformation will not be scheduled.
-schedule: "1 * * * *"  # Optional, default: null
+schedule: 1 * * * *    # Optional, default: null
 
 # The path to a file containing the SQL query for this transformation.
 query: transformation.sql  # Required
@@ -12,10 +12,10 @@ query: transformation.sql  # Required
 # Valid values are: assets, assethierarchy, events, timeseries, datapoints, stringdatapoints
 destination: assets  # Required
 # When writing to RAW tables, use the following syntax:
-destination:
-  type: raw
-  rawDatabase: some_database
-  rawTable: some_table
+# destination:
+#   type: raw
+#   rawDatabase: some_database
+#   rawTable: some_table
 
 # Valid values are:
 #   upsert: Create new items, or update existing items if their id or externalId already exists.
@@ -26,25 +26,24 @@ action: update  # Optional, default: upsert
 
 # List of email adresses to send emails to on transformation errors
 notifications:  # Optional, default: null
-  - my.email@provider.com
-  ...
+    - my.email@provider.com
 
 # Either this OR authentication is required
 # The API key that will be used to run the transformation,
 # specified as the name of an environment variable.
-apiKey: SOME_ENVIRONMENT_VARIABLE
+apiKey: COGNITE_API_KEY
 # If you want to use separate API keys for reading/writing data, use the following syntax:
-apiKey:
-  read: READ_API_KEY
-  write: WRITE_API_KEY
+# apiKey:
+#   read: READ_API_KEY
+#   write: WRITE_API_KEY
 
 # Either this or apiKey is required
 # The client credentials to be used in the transformation
 authentication:
-  tokenUrl: "https://my-idp.com/oauth2/token"
-  scopes:
-    - https://bluefield.cognitedata.com/.default
-  cdfProjectName: my-project
-  # The following two is given as the name of an environment variable
-  clientId: COGNITE_CLIENT_ID
-  clientSecret: COGNITE_CLIENT_SECRET
+    tokenUrl: TOKEN_URL
+    scopes:
+        - https://bluefield.cognitedata.com/.default
+    cdfProjectName: my-project
+    # The following two is given as the name of an environment variable
+    clientId: COGNITE_CLIENT_ID
+    clientSecret: COGNITE_CLIENT_SECRET
