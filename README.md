@@ -58,7 +58,7 @@ Thus, this repository contains two similar (but different) workflow-files, one f
 1. API-key flow: `.github/workflows/deploy-push-api-key-master.yml`
 2. OIDC flow: `.github/workflows/deploy-push-oidc-master.yml`
 
-You should choose one of these, although a combination is possible, either through having different auth flow for different branches (please don't) or using an API-key for transformations (at runtime), but using OIDC flow for transformations deployment (or the other way around - also, please don't).
+You should choose one of these, although a combination is possible, either through having different auth flow for different branches (please don't) or using an API-key for transformations (at runtime), but using OIDC flow for the deployment of transformations (or the other way around - also, please don't).
 
 ##### We encourage the use of OpenID Connect (OIDC)!
 
