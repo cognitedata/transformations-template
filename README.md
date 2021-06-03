@@ -74,7 +74,7 @@ JETFIRE_API_KEY_${BRANCH} -> JETFIRE_API_KEY_MASTER
 COGNITE_API_KEY_${BRANCH} -> COGNITE_API_KEY_MASTER
 ```
 
-Similarly, if you have a `customer-prod` project, and you have created a workflow that only runs on your branch named `prod`, you would need to store the API-key to this project under the GitHub secret: `JETFIRE_API_KEY_PROD` (and similarly for the runtime key).  You can of course repeat this for as many projects as you want!
+Similarly, if you have a `customer-prod` project, and you have created a workflow that only runs on your branch named `prod`, you would need to store the API-key to this project under the GitHub secret: `JETFIRE_API_KEY_PROD` (and similarly for the runtime key). You can of course repeat this for as many projects as you want!
 
 #### 2. OIDC flow
 In essence, the OIDC flow is very similar, except we use a pre-shared *client secret* instead of an API-key. However, this approach needs a few other bits of information to work: The client ID, token URL, and scopes. In the workflow file, you must change these in accordance with your customer's setup.
