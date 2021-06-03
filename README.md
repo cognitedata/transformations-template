@@ -77,9 +77,9 @@ COGNITE_API_KEY_${BRANCH} -> COGNITE_API_KEY_MASTER
 Similarly, if you have a `customer-prod` project, and you have created a workflow that only runs on your branch named `prod`, you would need to store the API-key to this project under the GitHub secret: `JETFIRE_API_KEY_PROD` (and similarly for the runtime key).  You can of course repeat this for as many projects as you want!
 
 #### 2. OIDC flow
-In essence, the OIDC flow is very similar, except we use a pre-shared *client secret* instead of an API-key. However, this approach needs a few other bits of information to work: The client ID, token URL and scopes. In the workflow file, you must change these in accordance with your customer's setup.
+In essence, the OIDC flow is very similar, except we use a pre-shared *client secret* instead of an API-key. However, this approach needs a few other bits of information to work: The client ID, token URL, and scopes. In the workflow file, you must change these in accordance with your customer's setup.
 
-It is a similar story for the credentials that are going to be used at runtime (as opposed to _deployment of transformations to CDF_), except these are specified in each manifest-file, pointing to specific environment variables. You must/should specify these environment variables in the workflow file. Let's check out a full example:
+Similarly for the credentials that are going to be used at runtime (as opposed to _deployment of transformations to CDF_), except these are specified in each manifest-file, pointing to specific environment variables. You must/should specify these environment variables in the workflow file. Let's check out a full example:
 
 ```yaml
 ###########################
@@ -112,7 +112,7 @@ authentication:
   clientSecret: COGNITE_CLIENT_SECRET
 ```
 
-The one thing to take away from this example is that the manifest variables, like `clientId`, points to the corresponding environment variables specified below `env` in the workflow file. Feel free name these whatever you want.
+The one thing to take away from this example is that the manifest variables, like `clientId`, points to the corresponding environment variables specified below `env` in the workflow file. Feel free to name these whatever you want.
 
 ##### 2. OIDC flow: client secrets
 By default, we expect you to store the client secrets as secrets in your Github repository. This way we can automatically read them in the workflows, *sweeeeet*. The expected setup is as follows:
