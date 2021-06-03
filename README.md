@@ -63,7 +63,7 @@ You should choose one of these, although a combination is possible, either throu
 ##### We encourage the use of OpenID Connect (OIDC)!
 
 #### 1. API-key flow
-In order to connect to CDF, we need the API-key for the `jetfire-cli` to be able to deploy the transformations (this is separate from the key used at runtime). In this template, it will be read automatically by the workflow, by reading it from your GitHub secrets. Thus, _surprise surprise_, you need to store the API-key in GitHub secrets in your own repo. However, there is one catch! To distinguish between the API-key meant for e.g. testing- and production environments, we control this by appending the branch name responsible for deployment to the end of the secret name like this: `JETFIRE_API_KEY_{BRANCH}`.
+In order to connect to CDF, we need the API-key for the `jetfire-cli` to be able to deploy the transformations (this is separate from the key used at runtime). In this template, it will be read automatically by the workflow, by reading it from your GitHub secrets. Thus, _surprise surprise_, you need to store the API-key in GitHub secrets in your own repo. However, there is one catch! To distinguish between the API-key meant for e.g. testing and production environments, we control this by appending the branch name responsible for deployment to the end of the secret name as follows: `JETFIRE_API_KEY_{BRANCH}`.
 
 Let's check out an example. On merges to 'master', you want to deploy to `customer-dev`, so you use the API-key for this project and store it as a GitHub secret with the name:
 
