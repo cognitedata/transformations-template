@@ -6,7 +6,7 @@ Transformations in CDF are used to process data from RAW to other CDF resource t
 ### How
 This template uses Github Workflows to run the `jetfire-cli` to deploy transformations to CDF on merges to `master`. If you want to use it with multiple CDF projects, e.g. `customer-dev` and `customer-prod`, you can clone the `deploy-push-master.yml` file and modify it for merges to a specific branch of your choice.
 
-### Repository Layout
+## Repository Layout
 In the top-level folder `transformations` you may add each transformation job as a new directory, for example:
 ```
 .
@@ -25,7 +25,7 @@ In the top-level folder `transformations` you may add each transformation job as
 ```
 However, you can pretty much change this layout however you see fit - as long as you obey the following rule: Keep one transformation (manifest+sql) per folder.
 
-#### Example layout:
+### Example layout:
 ```
 .
 └── transformations
@@ -48,19 +48,93 @@ However, you can pretty much change this layout however you see fit - as long as
             └── transformation.sql
 ```
 
-### Requirements
-#### Jetfire API-key
-In order to connect to CDF, we need the API-key for Jetfire. In this template, it will be automatically read by the workflow, by reading it from your GitHub secrets. Thus, _surprise surprise_, you need to store the API-key in GitHub secrets in your own repo. However, there is one catch! To distinguish between the API-key meant for e.g. testing- and production environments, we control this by appending the branch name responsible for deployment to the end of the secret name like this: `JETFIRE_API_KEY_{BRANCH}`.
+## Requirements
+### Authentication
+There are two differnt authentication flows:
+1. Using API-keys (old)
+2. Using OIDC (new)
+
+Thus, this repository contains two similar (but different) workflow-files, one for each flow:
+1. API-key flow: `.github/workflows/deploy-push-api-key-master.yml`
+2. OIDC flow: `.github/workflows/deploy-push-oidc-master.yml`
+
+You should choose one of these, although a combination is possible, either through having different auth flow for different branches (please don't) or using an API-key for transformations (at runtime), but using OIDC flow for the deployment of transformations (or the other way around - also, please don't).
+
+##### We encourage the use of OpenID Connect (OIDC)!
+
+#### 1. API-key flow
+In order to connect to CDF, we need the API-key for the `jetfire-cli` to be able to deploy the transformations (this is separate from the key used at runtime). In this template, it will be read automatically by the workflow, by reading it from your GitHub secrets. Thus, _surprise surprise_, you need to store the API-key in GitHub secrets in your own repo. However, there is one catch! To distinguish between the API-key meant for e.g. testing and production environments, we control this by appending the branch name responsible for deployment to the end of the secret name as follows: `JETFIRE_API_KEY_{BRANCH}`.
 
 Let's check out an example. On merges to 'master', you want to deploy to `customer-dev`, so you use the API-key for this project and store it as a GitHub secret with the name:
 
-`JETFIRE_API_KEY_{BRANCH} -> JETFIRE_API_KEY_MASTER`
+```yaml
+# Assuming you have one 'master' branch you use for deployments,
+# the secrets you need to store are:
+JETFIRE_API_KEY_${BRANCH} -> JETFIRE_API_KEY_MASTER
+COGNITE_API_KEY_${BRANCH} -> COGNITE_API_KEY_MASTER
+```
 
-Similarly, if you have a `customer-prod` project, and you have created a build-file that only runs on your branch `prod`, you would need to store the API-key to this project under the GitHub secret: `JETFIRE_API_KEY_PROD`. You can of course repeat this for as many projects as you want!
+Similarly, if you have a `customer-prod` project, and you have created a workflow that only runs on your branch named `prod`, you would need to store the API-key to this project under the GitHub secret: `JETFIRE_API_KEY_PROD` (and similarly for the runtime key). You can of course repeat this for as many projects as you want!
 
-#### Capabilities
-The API-key needs the following:
-- `groups:list`: To verify that it is a member of the `transformations` or `jetfire` group.
+#### 2. OIDC flow
+In essence, the OIDC flow is very similar, except we use a pre-shared *client secret* instead of an API-key. However, this approach needs a few other bits of information to work: The client ID, token URL, and scopes. In the workflow file, you must change these in accordance with your customer's setup.
+
+Similarly for the credentials that are going to be used at runtime (as opposed to _deployment of transformations to CDF_), except these are specified in each manifest-file, pointing to specific environment variables. You must/should specify these environment variables in the workflow file. Let's check out a full example:
+
+```yaml
+###########################
+# From the workflow file: #
+###########################
+- name: Deploy transformations
+  uses: cognitedata/jetfire-cli@v2
+  env:
+      COGNITE_CLIENT_ID: my-cognite-client-id
+      COGNITE_CLIENT_SECRET: ...
+      COGNITE_PROJECT: my-cognite-project
+      TOKEN_URL: my-token-url
+  with:
+      path: transformations
+      client-id: my-jetfire-client-id
+      client-secret: ...
+      token-url: https://login.microsoftonline.com/<my-azure-tenant-id>/oauth2/v2.0/token
+      scopes:
+          - https://<my-cluster>.cognitedata.com/.default
+
+#####################
+# In all manifests: #
+#####################
+authentication:
+  tokenUrl: TOKEN_URL
+  scopes:
+    - https://<my-cluster>.cognitedata.com/.default
+  cdfProjectName: COGNITE_PROJECT
+  clientId: COGNITE_CLIENT_ID
+  clientSecret: COGNITE_CLIENT_SECRET
+```
+
+The one thing to take away from this example is that the manifest variables, like `clientId`, points to the corresponding environment variables specified below `env` in the workflow file. Feel free to name these whatever you want.
+
+##### 2. OIDC flow: client secrets
+By default, we expect you to store the client secrets as secrets in your Github repository. This way we can automatically read them in the workflows, *sweeeeet*. The expected setup is as follows:
+
+```yaml
+# Assuming you have one 'master' branch you use for deployments,
+# the secrets you need to store are:
+JETFIRE_CLIENT_SECRET_${BRANCH} -> JETFIRE_CLIENT_SECRET_MASTER
+COGNITE_CLIENT_SECRET_${BRANCH} -> COGNITE_CLIENT_SECRET_MASTER
+
+# If you need separation of e.g. dev/test/prod, you can then use
+# another branch named 'prod' (or test or dev...):
+JETFIRE_CLIENT_SECRET_${BRANCH} -> JETFIRE_CLIENT_SECRET_PROD
+COGNITE_CLIENT_SECRET_${BRANCH} -> COGNITE_CLIENT_SECRET_PROD
+```
+
+If your customer wants the possibility to rotate these keys regularly, one solution is to instead get a read-key to the secret storage service used by the customer. This is outside the scope of this recipe / template repository, since it would be very cloud-specific. You can ask Murad for advice on how he set this up for NOC!
+
+##### Capabilities
+Regardless of auth flow, you need the following for you *deployment credentials*:
+- *Be part of a group* named `transformations` or `jetfire`...
+- Capability: `groups:list` to verify that you are a member of said group.
 
 ### Manifest
 The manifest file is a `yaml`-file that describes the transformation, like name, schedule, external ID and what CDF resource type it modifies, - and in what way (like _create_ vs _upsert_)!
@@ -76,8 +150,8 @@ When writing to RAW tables, you also need to specify `type`, `rawDatabase` and `
 ```yaml
 destination:
   type: raw
-  rawDatabase: some_database
-  rawTable: some_table
+  rawDatabase: someDatabase
+  rawTable: someTable
 ```
 
 #### Required _field_ for auth
@@ -110,9 +184,9 @@ authentication:
 ```
 
 #### Valid values for `action`:
-1. `upsert`: Create new items, or update existing items if their id or externalId already exists.
-2. `create`: Create new items. The transformation will fail if there are id or externalId conflicts.
-3. `update`: Update existing items. The transformation will fail if an id or externalId does not exist.
+1. `upsert`: Create new items, or update existing items if their id or `externalId` already exists.
+2. `create`: Create new items. The transformation will fail if there are id or `externalId` conflicts.
+3. `update`: Update existing items. The transformation will fail if an id or `externalId` does not exist.
 4. `delete`: Delete items by internal id.
 
 #### Schedule
