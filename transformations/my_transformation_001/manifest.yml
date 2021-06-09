@@ -1,6 +1,6 @@
 ---
 externalId: my-transformation-001  # Required
-name: My Transformation 001 # Required
+name: My Transformation 001  # Required
 shared: true  # Optional, default: false
 
 # If null, the transformation will not be scheduled.

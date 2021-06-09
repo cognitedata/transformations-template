@@ -196,3 +196,19 @@ schedule: */2 * * * *    # Not valid
 schedule: 0/2 * * * *    # Valid, but non-standard CRON
 schedule: '*/2 * * * *'  # Valid
 ```
+
+# Pre-commit
+Although this repository has nothing to do with Python, it contains a configuration file for a very neat pip-installable package, `pre-commit`. What it does is install some git-hooks that run automatically when you try to commit changes. The repository also has a workflow that runs on all PRs that uses `yamllint` to verify the `.yaml`-files. The exact command is: `yamllint transformations/`, to avoid checking other yaml-files that might be present in the repo.
+
+What these hooks do, is to run a yaml-formatter, _then yamllint_ to verify. Thus, these tools are only meant for your convenience and can be used by running the follwing from the root of the repository:
+
+```sh
+# Assuming you have python available
+pip install pre-commit
+pre-commit install
+
+# You can also run all files:
+pre-commit run --all-files
+```
+
+This is only needed the first time, for all future commits from this repo, the hooks will run! :rocket:
