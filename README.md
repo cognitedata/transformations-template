@@ -207,3 +207,5 @@ What these hooks do, is to run a yaml-formatter, _then yamllint_ to verify. Thus
 pip install pre-commit
 pre-commit install
 ```
+
+This is only needed the first time, for all future commits from this repo, the hooks will run! :rocket:
