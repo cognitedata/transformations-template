@@ -206,6 +206,9 @@ What these hooks do, is to run a yaml-formatter, _then yamllint_ to verify. Thus
 # Assuming you have python available
 pip install pre-commit
 pre-commit install
+
+# You can also run all files:
+pre-commit run --all-files
 ```
 
 This is only needed the first time, for all future commits from this repo, the hooks will run! :rocket:
