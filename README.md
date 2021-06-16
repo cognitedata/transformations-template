@@ -97,8 +97,7 @@ Similarly for the credentials that are going to be used at runtime (as opposed t
       client-id: my-jetfire-client-id
       client-secret: ...
       token-url: https://login.microsoftonline.com/<my-azure-tenant-id>/oauth2/v2.0/token
-      scopes:
-          - https://<my-cluster>.cognitedata.com/.default
+      scopes: https://<my-cluster>.cognitedata.com/.default
 
 #####################
 # In all manifests: #
@@ -106,7 +105,7 @@ Similarly for the credentials that are going to be used at runtime (as opposed t
 authentication:
   tokenUrl: TOKEN_URL
   scopes:
-    - https://<my-cluster>.cognitedata.com/.default
+      - https://<my-cluster>.cognitedata.com/.default
   cdfProjectName: COGNITE_PROJECT
   clientId: COGNITE_CLIENT_ID
   clientSecret: COGNITE_CLIENT_SECRET
@@ -169,7 +168,7 @@ If `authentication` is used instead, the client credentials to be used in the tr
 authentication:
   tokenUrl: "https://my-idp.com/oauth2/token"
   scopes:
-    - https://bluefield.cognitedata.com/.default
+      - https://bluefield.cognitedata.com/.default
   cdfProjectName: my-project
   clientId: COGNITE_CLIENT_ID          # Name of an environment variable
   clientSecret: COGNITE_CLIENT_SECRET  # Name of an environment variable

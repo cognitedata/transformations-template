@@ -46,5 +46,4 @@ jobs:
                   client-id: my-jetfire-client-id
                   client-secret: ${{ secrets[steps.extract_secrets.outputs.jetfire_client_secret] }}
                   token-url: https://login.microsoftonline.com/<my-azure-tenant-id>/oauth2/v2.0/token
-                  scopes:
-                      - https://<my-cluster>.cognitedata.com/.default
+                  scopes: https://<my-cluster>.cognitedata.com/.default
