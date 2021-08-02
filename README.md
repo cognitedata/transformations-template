@@ -132,8 +132,9 @@ If your customer wants the possibility to rotate these keys regularly, one solut
 
 ##### Capabilities
 Regardless of auth flow, you need the following for you *deployment credentials*:
-- *Be part of a group* named `transformations` or `jetfire`...
-- Capability: `groups:list` to verify that you are a member of said group.
+1. Capability: `project:list`
+1. *Be part of a group* named `transformations` or `jetfire`...
+1. Capability: `groups:list` (to verify that you are a member of said group)
 
 ### Manifest
 The manifest file is a `yaml`-file that describes the transformation, like name, schedule, external ID and what CDF resource type it modifies, - and in what way (like _create_ vs _upsert_)!
