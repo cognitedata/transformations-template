@@ -39,7 +39,6 @@ jobs:
                   # List all needed keys or environment variables referenced by
                   # your manifests to be used by transformations at runtime:
                   COGNITE_API_KEY: ${{ secrets[steps.extract_secrets.outputs.cognite_api_key] }}
-                  COGNITE_PROJECT: my-cognite-project
               with:
                   path: transformations
                   api-key: ${{ secrets[steps.extract_secrets.outputs.jetfire_api_key] }}

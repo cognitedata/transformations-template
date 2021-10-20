@@ -40,10 +40,11 @@ apiKey: COGNITE_API_KEY
 # Either this or apiKey is required
 # The client credentials to be used in the transformation
 authentication:
+    # The following are explicit values, not environment variables
     scopes:
         - https://bluefield.cognitedata.com/.default
     cdfProjectName: my-project
+    tokenUrl: https://login.microsoftonline.com/<my-azure-tenant-id>/oauth2/v2.0/token
     # The following are given as the name of an environment variable:
-    tokenUrl: TOKEN_URL
     clientId: COGNITE_CLIENT_ID
     clientSecret: COGNITE_CLIENT_SECRET
