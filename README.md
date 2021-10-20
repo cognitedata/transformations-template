@@ -102,10 +102,12 @@ Similarly for the credentials that are going to be used at runtime (as opposed t
 # In all manifests: #
 #####################
 authentication:
+  # The following are explicit values, not environment variables
   tokenUrl: https://login.microsoftonline.com/<my-azure-tenant-id>/oauth2/v2.0/token
   scopes:
       - https://<my-cluster>.cognitedata.com/.default
   cdfProjectName: my-project-name
+  # The following are given as the name of an environment variable:
   clientId: COGNITE_CLIENT_ID
   clientSecret: COGNITE_CLIENT_SECRET
 ```
