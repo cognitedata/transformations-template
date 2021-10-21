@@ -90,23 +90,24 @@ Similarly for the credentials that are going to be used at runtime (as opposed t
   env:
       COGNITE_CLIENT_ID: my-cognite-client-id
       COGNITE_CLIENT_SECRET: ...
-      COGNITE_PROJECT: my-cognite-project
-      TOKEN_URL: my-token-url
   with:
       path: transformations
       client-id: my-jetfire-client-id
       client-secret: ...
+      project-name: my-project-name
       token-url: https://login.microsoftonline.com/<my-azure-tenant-id>/oauth2/v2.0/token
-      scopes: https://<my-cluster>.cognitedata.com/.default
+      scopes: https://<my-cluster>.cognitedata.com/.default # space separated if multiple
 
 #####################
 # In all manifests: #
 #####################
 authentication:
-  tokenUrl: TOKEN_URL
+  # The following are explicit values, not environment variables
+  tokenUrl: https://login.microsoftonline.com/<my-azure-tenant-id>/oauth2/v2.0/token
   scopes:
       - https://<my-cluster>.cognitedata.com/.default
-  cdfProjectName: COGNITE_PROJECT
+  cdfProjectName: my-project-name
+  # The following are given as the name of an environment variable:
   clientId: COGNITE_CLIENT_ID
   clientSecret: COGNITE_CLIENT_SECRET
 ```
@@ -167,7 +168,7 @@ apiKey:
 If `authentication` is used instead, the client credentials to be used in the transformation must be provided with the following syntax:
 ```yaml
 authentication:
-  tokenUrl: "https://my-idp.com/oauth2/token"
+  tokenUrl: https://login.microsoftonline.com/<my-azure-tenant-id>/oauth2/v2.0/token
   scopes:
       - https://bluefield.cognitedata.com/.default
   cdfProjectName: my-project
