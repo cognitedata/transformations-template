@@ -1,4 +1,5 @@
 # Transformations CI/CD Template
+#### Note: After cloning this template, please remove the file `.github/CODEOWNERS`, or update it!
 
 ### Why
 Transformations in CDF are used to process data from RAW to other CDF resource types ("clean"), for example Assets or Time Series.
