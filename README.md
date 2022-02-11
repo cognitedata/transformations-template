@@ -1,3 +1,6 @@
+## NOTE: This template will soon be deprecated. Please use the [new template](https://github.com/cognitedata/transformations-action-template)
+
+
 # Transformations CI/CD Template
 #### Note: After cloning this template, please remove the file `.github/CODEOWNERS`, or update it!
 
